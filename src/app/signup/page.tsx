@@ -50,7 +50,7 @@ function SignUpForm() {
       return toast.error(error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে");
     }
 
-    toast.success("সফলভাবে অ্যাকাউন্ট তৈরি হয়েছে!");
+    toast.success("সফলভাবে অ্যাকাউন্ট তৈরি হয়েছে!");
 
     router.push(callbackUrl);
   }
@@ -107,11 +107,7 @@ function SignUpForm() {
             </label>
 
             <div className="relative">
-              <PasswordInput
-                name="password"
-                placeholder="কমপক্ষে ৮ অক্ষর"
-                className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
-              />
+              <PasswordInput name="password" placeholder="কমপক্ষে ৮ অক্ষর" />
             </div>
           </div>
 
@@ -121,11 +117,7 @@ function SignUpForm() {
             </label>
 
             <div className="relative">
-              <PasswordInput
-                name="confirmPassword"
-                placeholder="আবার লিখুন"
-                className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
-              />
+              <PasswordInput name="confirmPassword" placeholder="আবার লিখুন" />
             </div>
           </div>
 

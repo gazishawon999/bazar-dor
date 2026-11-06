@@ -8,6 +8,7 @@ export default function PasswordInput({
   placeholder = "পাসওয়ার্ড",
 }: {
   name?: string;
+  className?: string;
   placeholder?: string;
 }) {
   const [show, setShow] = useState(false);

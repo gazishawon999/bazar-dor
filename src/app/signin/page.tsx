@@ -1,16 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import toast from "react-hot-toast";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import PasswordInput from "@/components/PasswordInput";
 import { authClient } from "@/lib/auth-client";
 
-export default function SignInPage() {
+function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -26,12 +29,12 @@ export default function SignInPage() {
 
     if (error) return toast.error(error.message || "ইমেইল বা পাসওয়ার্ড ভুল");
     toast.success("সফলভাবে সাইন ইন হয়েছে");
-    router.push("/");
+    router.push(callbackUrl);
     router.refresh();
   }
 
   async function social(provider: "google" | "github") {
-    await authClient.signIn.social({ provider, callbackURL: "/" });
+    await authClient.signIn.social({ provider, callbackURL: callbackUrl });
   }
 
   return (
@@ -50,7 +53,7 @@ export default function SignInPage() {
           </label>
           <label className="block">
             <span className="text-sm">পাসওয়ার্ড</span>
-            <PasswordInput />
+            <PasswordInput name="password" placeholder="পাসওয়ার্ড লিখুন" />
           </label>
           <button
             disabled={loading}
@@ -64,12 +67,14 @@ export default function SignInPage() {
           <button
             onClick={() => social("google")}
             className="btn btn-outline btn-sm sm:btn-md"
+            type="button"
           >
             <FaGoogle /> Google
           </button>
           <button
             onClick={() => social("github")}
             className="btn btn-outline btn-sm sm:btn-md"
+            type="button"
           >
             <FaGithub /> GitHub
           </button>
@@ -82,5 +87,13 @@ export default function SignInPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInForm />
+    </Suspense>
   );
 }
