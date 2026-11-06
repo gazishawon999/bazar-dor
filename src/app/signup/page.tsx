@@ -38,63 +38,116 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md bg-white rounded-xl border border-green-100 p-6 shadow-sm">
-        <h1 className="text-2xl font-bold text-center">অ্যাকাউন্ট তৈরি করুন</h1>
-        <form onSubmit={onSubmit} className="mt-6 space-y-4">
-          <label className="block">
-            <span className="text-sm">নাম</span>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4F7F5] px-4 py-10 font-sans">
+      <div className="text-center mb-8">
+        <h1 className="text-[28px] md:text-3xl font-bold text-gray-900 mb-2">
+          অ্যাকাউন্ট তৈরি করুন
+        </h1>
+        <p className="text-sm text-gray-500">
+          বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
+        </p>
+      </div>
+
+      <div className="w-full max-w-[480px] bg-white rounded-2xl border border-gray-100 p-6 md:p-8 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+        <form onSubmit={onSubmit} className="space-y-5">
+          <div className="block space-y-1.5">
+            <label className="text-[13px] font-semibold text-gray-700">
+              নাম
+            </label>
             <input
               name="name"
-              className="input input-bordered w-full mt-1"
-              placeholder="আপনার নাম"
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
+              placeholder="যেমন: শাওন গাজী"
             />
-          </label>
-          <label className="block">
-            <span className="text-sm">ইমেইল</span>
+          </div>
+
+          <div className="block space-y-1.5">
+            <label className="text-[13px] font-semibold text-gray-700">
+              ইমেইল
+            </label>
             <input
               name="email"
               type="email"
-              className="input input-bordered w-full mt-1"
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
               placeholder="you@example.com"
             />
-          </label>
-          <label className="block">
-            <span className="text-sm">পাসওয়ার্ড</span>
-            <PasswordInput placeholder="কমপক্ষে ৮ অক্ষর" />
-          </label>
-          <label className="block">
-            <span className="text-sm">পাসওয়ার্ড নিশ্চিত করুন</span>
-            <PasswordInput placeholder="আবার লিখুন" />
-          </label>
+          </div>
+
+          <div className="block space-y-1.5">
+            <label className="text-[13px] font-semibold text-gray-700">
+              পাসওয়ার্ড
+            </label>
+            <div className="relative">
+              <PasswordInput
+                placeholder="কমপক্ষে ৮ অক্ষর"
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
+              />
+            </div>
+          </div>
+
+          <div className="block space-y-1.5">
+            <label className="text-[13px] font-semibold text-gray-700">
+              পাসওয়ার্ড নিশ্চিত করুন
+            </label>
+            <div className="relative">
+              <PasswordInput
+                placeholder="আবার লিখুন"
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
+              />
+            </div>
+          </div>
+
           <button
             disabled={loading}
-            className="btn bg-green-700 hover:bg-green-800 text-white w-full"
+            className="w-full mt-2 py-3 px-4 bg-[#0E8A43] hover:bg-green-700 text-white rounded-lg text-[15px] font-medium transition-colors shadow-sm disabled:opacity-70"
           >
-            {loading ? "অপেক্ষা করুন..." : "সাইন আপ"}
+            {loading ? "অপেক্ষা করুন..." : "অ্যাকাউন্ট তৈরি করুন"}
           </button>
         </form>
-        <div className="divider text-xs">অথবা</div>
-        <div className="grid grid-cols-2 gap-3">
+
+        <div className="flex items-center my-6">
+          <div className="flex-grow border-t border-gray-200"></div>
+          <span className="mx-4 text-xs font-medium text-gray-500">অথবা</span>
+          <div className="flex-grow border-t border-gray-200"></div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <button
             onClick={() => social("google")}
-            className="btn btn-outline btn-sm sm:btn-md"
+            type="button"
+            className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white border border-gray-200 rounded-lg text-[13px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            <FaGoogle /> Google
+            <FaGoogle className="text-red-500 text-base" />
+            Google দিয়ে চালিয়ে যান
           </button>
           <button
             onClick={() => social("github")}
-            className="btn btn-outline btn-sm sm:btn-md"
+            type="button"
+            className="flex items-center justify-center gap-2 py-2.5 px-4 bg-white border border-gray-200 rounded-lg text-[13px] font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            <FaGithub /> GitHub
+            <FaGithub className="text-gray-900 text-base" />
+            GitHub দিয়ে চালিয়ে যান
           </button>
         </div>
-        <p className="text-center text-sm mt-5">
-          আগে থেকেই অ্যাকাউন্ট আছে?{" "}
-          <Link href="/signin" className="text-green-700 font-semibold">
-            সাইন ইন
+
+        <p className="text-center text-[13px] text-gray-600 mt-6">
+          অ্যাকাউন্ট আছে?{" "}
+          <Link
+            href="/signin"
+            className="text-[#0E8A43] font-semibold hover:underline"
+          >
+            সাইন ইন করুন
           </Link>
         </p>
+      </div>
+
+      <div className="mt-6">
+        <Link
+          href="/"
+          className="text-[13px] text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-1"
+        >
+          ← হোম পেজে ফিরে যান
+        </Link>
       </div>
     </div>
   );
