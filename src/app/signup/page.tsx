@@ -1,40 +1,65 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import toast from "react-hot-toast";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 import PasswordInput from "@/components/PasswordInput";
 import { authClient } from "@/lib/auth-client";
 
-export default function SignUpPage() {
+function SignUpForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+
+  const callbackUrl = searchParams.get("callbackUrl") || "/profile";
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     const fd = new FormData(e.currentTarget);
     const name = String(fd.get("name") || "").trim();
     const email = String(fd.get("email") || "").trim();
     const password = String(fd.get("password") || "");
+    const confirmPassword = String(fd.get("confirmPassword") || "");
 
-    if (!name || !email) return toast.error("নাম ও ইমেইল দিন");
-    if (password.length < 8)
+    if (!name || !email) {
+      return toast.error("নাম ও ইমেইল দিন");
+    }
+
+    if (password.length < 8) {
       return toast.error("পাসওয়ার্ড কমপক্ষে ৮ অক্ষরের হতে হবে");
+    }
+
+    if (password !== confirmPassword) {
+      return toast.error("পাসওয়ার্ড দুটি মিলছে না");
+    }
 
     setLoading(true);
-    const { error } = await authClient.signUp.email({ name, email, password });
+
+    const { error } = await authClient.signUp.email({
+      name,
+      email,
+      password,
+    });
+
     setLoading(false);
 
-    if (error)
+    if (error) {
       return toast.error(error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে");
-    toast.success("অ্যাকাউন্ট তৈরি হয়েছে, এখন সাইন ইন করুন");
-    router.push("/signin");
+    }
+
+    toast.success("সফলভাবে অ্যাকাউন্ট তৈরি হয়েছে!");
+
+    router.push(callbackUrl);
   }
 
   async function social(provider: "google" | "github") {
-    await authClient.signIn.social({ provider, callbackURL: "/" });
+    await authClient.signIn.social({
+      provider,
+      callbackURL: callbackUrl,
+    });
   }
 
   return (
@@ -43,6 +68,7 @@ export default function SignUpPage() {
         <h1 className="text-[28px] md:text-3xl font-bold text-gray-900 mb-2">
           অ্যাকাউন্ট তৈরি করুন
         </h1>
+
         <p className="text-sm text-gray-500">
           বিনা খরচে সাইন আপ করে সব বিস্তারিত দাম দেখুন।
         </p>
@@ -54,6 +80,7 @@ export default function SignUpPage() {
             <label className="text-[13px] font-semibold text-gray-700">
               নাম
             </label>
+
             <input
               name="name"
               className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
@@ -65,6 +92,7 @@ export default function SignUpPage() {
             <label className="text-[13px] font-semibold text-gray-700">
               ইমেইল
             </label>
+
             <input
               name="email"
               type="email"
@@ -77,8 +105,10 @@ export default function SignUpPage() {
             <label className="text-[13px] font-semibold text-gray-700">
               পাসওয়ার্ড
             </label>
+
             <div className="relative">
               <PasswordInput
+                name="password"
                 placeholder="কমপক্ষে ৮ অক্ষর"
                 className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
               />
@@ -89,8 +119,10 @@ export default function SignUpPage() {
             <label className="text-[13px] font-semibold text-gray-700">
               পাসওয়ার্ড নিশ্চিত করুন
             </label>
+
             <div className="relative">
               <PasswordInput
+                name="confirmPassword"
                 placeholder="আবার লিখুন"
                 className="w-full px-4 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:border-green-600 focus:ring-1 focus:ring-green-600 transition-colors placeholder-gray-400"
               />
@@ -107,7 +139,9 @@ export default function SignUpPage() {
 
         <div className="flex items-center my-6">
           <div className="flex-grow border-t border-gray-200"></div>
+
           <span className="mx-4 text-xs font-medium text-gray-500">অথবা</span>
+
           <div className="flex-grow border-t border-gray-200"></div>
         </div>
 
@@ -120,6 +154,7 @@ export default function SignUpPage() {
             <FaGoogle className="text-red-500 text-base" />
             Google দিয়ে চালিয়ে যান
           </button>
+
           <button
             onClick={() => social("github")}
             type="button"
@@ -150,5 +185,13 @@ export default function SignUpPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignUpForm />
+    </Suspense>
   );
 }
