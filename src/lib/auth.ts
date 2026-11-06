@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export const auth = betterAuth({
+  baseURL: process.env.BETTER_AUTH_URL, // <-- এই লাইনটি অবশ্যই যোগ করতে হবে
   database: mongodbAdapter(client.db("bazar-dor")),
   emailAndPassword: {
     enabled: true,
